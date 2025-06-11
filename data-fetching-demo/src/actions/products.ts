@@ -14,6 +14,8 @@ export type FormState = {
   errors: Errors;
 };
 
+// when this function put on in useActionState, the first params will receive
+// preveState from formState and the second params will receive the formData
 export async function createProduct(prevState: FormState, formData: FormData) {
   const title = formData.get("title") as string;
   const price = formData.get("price") as string;
@@ -72,6 +74,7 @@ export async function editProduct(
   redirect("/products-db");
 }
 
+// revalidate cache
 export async function removeProduct(id: number) {
   await deleteProduct(id);
   revalidatePath("/products-db");

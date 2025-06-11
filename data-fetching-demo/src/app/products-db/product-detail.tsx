@@ -37,6 +37,7 @@ export const ProductDetail = ({ products }: { products: Product[] }) => {
           </h2>
           <p>{product.description}</p>
           <p className="text-lg font-medium">${product.price}</p>
+          {/* removeProduct.bind(null,product.id) */}
           <Form action={removeProductById.bind(null, product.id)}>
             <button
               type="submit"

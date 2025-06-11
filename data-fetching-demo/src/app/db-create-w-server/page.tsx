@@ -1,15 +1,19 @@
-"use client";
+// create data form in server
 
-import { FormState, createProduct } from "@/actions/products";
-import { Submit } from "@/components/submit";
-import { useActionState } from "react";
+import { addProduct } from "@/prisma-db";
+import { redirect } from "next/navigation";
 
 export default function AddProductPage() {
-	const initialState: FormState = {
-		errors: {},
-	};
+	const formAction = async (formData: FormData) => {
+		"use server";
+		const title = formData.get("title") as string;
+		const description = formData.get("description") as string;
+		const price = formData.get("price") as string;
 
-	const [state, formAction, isPending] = useActionState(createProduct, initialState);
+		console.log(formData);
+		await addProduct(title, parseInt(price), description);
+		redirect("/products-all");
+	};
 
 	return (
 		<form
@@ -25,9 +29,9 @@ export default function AddProductPage() {
 						name="title"
 					/>
 				</label>
-				{state.errors.title && (
+				{/* {state.errors.title && (
 					<p className="text-red-500">{state.errors.title}</p>
-				)}
+				)} */}
 			</div>
 			<div>
 				<label className="text-white">
@@ -38,9 +42,9 @@ export default function AddProductPage() {
 						name="price"
 					/>
 				</label>
-				{state.errors.price && (
+				{/* {state.errors.price && (
 					<p className="text-red-500">{state.errors.price}</p>
-				)}
+				)} */}
 			</div>
 			<div>
 				<label className="text-white">
@@ -50,18 +54,16 @@ export default function AddProductPage() {
 						name="description"
 					/>
 				</label>
-				{state.errors.description && (
+				{/* {state.errors.description && (
 					<p className="text-red-500">{state.errors.description}</p>
-				)}
+				)} */}
 			</div>
-			{/* <button
-        type="submit"
-        className="block w-full p-2 text-white bg-blue-500 rounded disabled:bg-gray-500"
-        disabled={isPending}
-      >
-        Submit
-      </button> */}
-			<Submit />
+			<button
+				type="submit"
+				className="block w-full p-2 text-white bg-blue-500 rounded disabled:bg-gray-500"
+			>
+				Submit
+			</button>
 		</form>
 	);
 }
